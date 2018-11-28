@@ -1,15 +1,36 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  ScrollView,
+  Button,
+  StyleSheet,
+} from 'react-native';
+import {
+  createDrawerNavigator,
+  createAppContainer,
+  SafeAreaView,
+} from 'react-navigation';
+import HomeScreen from './src/HomeScreen';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
-    );
-  }
-}
+const testNames = ['Kim', 'Jim', 'Tim'];
+
+const contentComponent = ({ navigation }) => (
+  <ScrollView>
+    <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
+      {testNames.map(name => <Button onPress={() => {
+        navigation.navigate('Home', { user: name });
+        navigation.closeDrawer();
+      }} title={name} />)}
+    </SafeAreaView>
+  </ScrollView>
+);
+
+const drawerNavigator = createDrawerNavigator({
+  Home: {
+    screen: HomeScreen,
+  },
+}, {
+  contentComponent,
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -19,3 +40,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default createAppContainer(drawerNavigator);
